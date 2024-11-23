@@ -9,10 +9,10 @@ export default function QueryParameters(app) {
             case "subtract":
                 result = parseInt(a) - parseInt(b);
                 break;
-            case "multiply": 
+            case "multiply":
                 result = parseInt(a) * parseInt(b);
                 break;
-            case "divide": 
+            case "divide":
                 if (parseInt(b) === 0) {
                     result = "Cannot divide by zero";
                 } else {
@@ -22,6 +22,7 @@ export default function QueryParameters(app) {
             default:
                 result = "Invalid operation";
         }
+
         res.send(result.toString());
     });
 }
