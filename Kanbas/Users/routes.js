@@ -21,17 +21,22 @@ export default function UserRoutes(app) {
                 { message: "Username already in use" });
             return;
         }
-        currentUser = dao.createUser(req.body);
+        const currentUser = dao.createUser(req.body);
+        req.session["currentUser"] = currentUser;
         res.json(currentUser);
-
 
     };
     const signin = (req, res) => {
         const { username, password } = req.body;
-        currentUser = dao.findUserByCredentials(username, password);
-        res.json(currentUser);
-    };
+        const currentUser = dao.findUserByCredentials(username, password);
+        if (currentUser) {
+            req.session["currentUser"] = currentUser;
+            res.json(currentUser);
+        } else {
+            res.status(401).json({ message: "Unable to login. Try again later." });
+        }
 
+    };
     const signout = (req, res) => {
         req.session.destroy();
         res.sendStatus(200);
