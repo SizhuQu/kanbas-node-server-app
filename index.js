@@ -7,6 +7,7 @@ import cors from "cors";
 import UserRoutes from "./Kanbas/Users/routes.js";
 import CourseRoutes from "./Kanbas/Courses/routes.js";
 import ModuleRoutes from "./Kanbas/Modules/routes.js";
+import EnrollmentRoutes from './Kanbas/Enrollments/routes.js';
 const app = express()
 app.use(cors({ credentials: true,
     origin: process.env.NETLIFY_URL || "http://localhost:3000",
@@ -27,8 +28,8 @@ if (process.env.NODE_ENV !== "development") {
 app.use(session(sessionOptions));
 app.use(express.json());
 UserRoutes(app);
-CourseRoutes(app);
 EnrollmentRoutes(app);
+CourseRoutes(app);
 ModuleRoutes(app);
 Lab5(app);
 Hello(app)
