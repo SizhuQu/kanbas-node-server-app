@@ -21,22 +21,17 @@ export default function UserRoutes(app) {
                 { message: "Username already in use" });
             return;
         }
-        const currentUser = dao.createUser(req.body);
-        req.session["currentUser"] = currentUser;
+        currentUser = dao.createUser(req.body);
         res.json(currentUser);
+
 
     };
     const signin = (req, res) => {
         const { username, password } = req.body;
-        const currentUser = dao.findUserByCredentials(username, password);
-        if (currentUser) {
-            req.session["currentUser"] = currentUser;
-            res.json(currentUser);
-        } else {
-            res.status(401).json({ message: "Unable to login. Try again later." });
-        }
-
+        currentUser = dao.findUserByCredentials(username, password);
+        res.json(currentUser);
     };
+
     const signout = (req, res) => {
         req.session.destroy();
         res.sendStatus(200);
@@ -64,10 +59,6 @@ export default function UserRoutes(app) {
     };
     const createCourse = (req, res) => {
         const currentUser = req.session["currentUser"];
-        if (!currentUser) {
-            console.log("User not authenticated");
-            return res.status(401).json({ message: "User not authenticated" });
-        }
         const newCourse = courseDao.createCourse(req.body);
         enrollmentsDao.enrollUserInCourse(currentUser._id, newCourse._id);
         res.json(newCourse);
