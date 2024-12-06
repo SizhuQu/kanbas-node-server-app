@@ -38,9 +38,5 @@ EnrollmentRoutes(app);
 CourseRoutes(app);
 ModuleRoutes(app);
 Lab5(app);
-Hello(app)
-// app.get('/hello', (req, res) => { res.send('Life is good!') })
-// app.get('/', (req, res) => {
-//     res.send('Welcome to Full Stack Development!')
-// })
+Hello(app);
 app.listen(process.env.PORT || 4000)
