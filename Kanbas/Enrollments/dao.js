@@ -5,6 +5,7 @@ export function enrollUserInCourse(userId, courseId) {
     enrollments.push({ _id: Date.now(), user: userId, course: courseId });
 }
 
+
 export function unenrollUserFromCourse(userId, courseId) {
     const { enrollments } = Database;
     Database.enrollments = enrollments.filter(
