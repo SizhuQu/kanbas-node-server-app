@@ -39,7 +39,6 @@ export default function UserRoutes(app) {
         res.send(status);
     };
 
-
     const findAllUsers = async (req, res) => {
         const { role, name } = req.query;
         if (role) {
@@ -121,7 +120,8 @@ export default function UserRoutes(app) {
         res.json(currentUser);
     };
     const createCourse = (req, res) => {
-
+        const course = courseDao.createCourse(req.body);
+        res.json(course);
     };
     app.post("/api/users/current/courses", createCourse);
     app.get("/api/users/:uid/courses", findCoursesForUser);
