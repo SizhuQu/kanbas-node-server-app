@@ -60,16 +60,18 @@ export default function UserRoutes(app) {
         res.json(user);
     };
 
-
     const deleteUser = async (req, res) => {
         const status = await dao.deleteUser(req.params.userId);
         res.json(status);
     };
 
     const findUserById = async (req, res) => {
-        const user = await dao.findUserById(req.params.userId);
+        const { userId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ message: "Invalid user ID" });
+        }
+        const user = await dao.findUserById(userId);
         res.json(user);
-
     };
 
     const updateUser = async (req, res) => {
@@ -96,15 +98,18 @@ export default function UserRoutes(app) {
     };
 
     const signin = async (req, res) => {
-        const { username, password } = req.body;
-        const currentUser = await dao.findUserByCredentials(username, password);
-        if (currentUser) {
-            req.session["currentUser"] = currentUser;
-            res.json(currentUser);
-        } else {
-            res.status(401).json({ message: "Unable to login. Try again later." });
+        try {
+            const { username, password } = req.body;
+            const currentUser = await dao.findUserByCredentials(username, password);
+            if (currentUser) {
+                req.session["currentUser"] = sanitizeUser(currentUser);
+                res.json(req.session["currentUser"]);
+            } else {
+                res.status(401).json(createError(401, "Invalid username or password"));
+            }
+        } catch (error) {
+            res.status(500).json(createError(500, "Signin failed"));
         }
-
     };
 
     const signout = (req, res) => {
